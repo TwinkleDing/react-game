@@ -1,10 +1,10 @@
 import React from 'react';
-import './game.css'
+import '../css/game.css'
 
 export default class Game extends React.Component{
   constructor(props){
     super(props)
-    this.state={
+    this.state = {
       size: {
         x: 20,
         y: 15
@@ -50,15 +50,17 @@ export default class Game extends React.Component{
   }
   onKeyDown = (e)=> {
     let index = null
-    this.state.showList.forEach((item, i)=> {
+    let showList = this.state.showList
+    showList.forEach((item, i)=> {
       if(e.key === item.value) {
         index = i
         return
       }
     })
-    if(index){
+    if(index !== null){
+      showList.splice(index, 1)
       this.setState({
-        showList: this.state.showList.splice(index, 1),
+        showList,
         score: this.state.score + 1
       })
     }

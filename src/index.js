@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter as Router , Route} from 'react-router-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Game from './pages/game.js';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Route exact path='/' component={Game}></Route>
+      <Route path='game' component={Game}></Route>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
