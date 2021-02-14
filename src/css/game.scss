@@ -1,18 +1,39 @@
-.board {
-  .row {
-    font-size: 0;
-  }
-}
-
-.square {
-  height: 40px;
-  width: 40px;
-  font-size: 14px;
-  background: rgba(170, 204, 0, 0.5);
-  box-sizing: border-box;
-  border: 1px solid rgba(170, 204, 0, 0.2);
-  display: inline-block;
+.game {
+  width: 1000px;
+  margin: 0 auto;
+  position: relative;
   text-align: center;
-  line-height: 40px;
-  vertical-align: middle;
+
+  .board {
+    .row {
+      width: auto;
+      font-size: 0;
+    }
+  }
+
+  .square {
+    height: 40px;
+    width: 40px;
+    font-size: 14px;
+    background: rgba(170, 204, 0, 0.5);
+    box-sizing: border-box;
+    border: 1px solid rgba(170, 204, 0, 0.2);
+    display: inline-block;
+    text-align: center;
+    line-height: 40px;
+    vertical-align: middle;
+  }
+
+  .settings {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: 1px solid #666;
+    border-radius: 20px;
+    text-align: left;
+
+    button {
+      margin: 5px 10px 0;
+    }
+  }
 }

@@ -4,12 +4,14 @@ import {BrowserRouter as Router , Route} from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Game from './pages/game.js';
+import Song from './pages/song.js';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Route exact path='/' component={Game}></Route>
-      <Route path='game' component={Game}></Route>
+      <Route path='/game' component={Game}></Route>
+      <Route path='/song' component={Song}></Route>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

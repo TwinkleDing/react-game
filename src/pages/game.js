@@ -6,48 +6,77 @@ export default class Game extends React.Component{
     super(props)
     this.state = {
       size: {
-        x: 20,
-        y: 15
+        x: 10,
+        y: 10
       },
       list:['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m','Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'],
       showList: [],
       start: false,
+      speed: 1000,
       score: 0,
-      repeat: 0
+      error: 0
     }
   }
   componentDidMount(){
-    document.addEventListener("keydown", this.onKeyDown)
+    document.addEventListener('keydown', this.onKeyDown)
   }
+  // 开始暂停游戏
   begin = (start)=> {
     this.setState({
       start: start
     })
     if(start){
-      this.timer = setInterval(() => {
-        const value = Math.floor(Math.random() * this.state.list.length)
-        const index = Math.floor(Math.random() * this.state.size.x * this.state.size.y)
-        const newOne = {
-          value: this.state.list[value],
-          index: index
-        }
-        let showList = this.state.showList
-        showList.push(newOne)
-        this.setState({
-          showList: [...showList]
-        })
-      }, 1000);
+      this.creatNewOne()
+      this.delFirst()
     }else {
-      clearInterval(this.timer)
+      clearInterval(this.startTimer)
+      clearInterval(this.delFirstTimer)
     }
   }
+  // 新增一个
+  creatNewOne = ()=> {
+    this.startTimer = setInterval(() => {
+      const value = Math.floor(Math.random() * this.state.list.length)
+      const index = Math.floor(Math.random() * this.state.size.x * this.state.size.y)
+      const newOne = {
+        value: this.state.list[value],
+        index: index
+      }
+      let showList = this.state.showList
+      let error = this.state.error
+      showList.forEach(item=> {
+        if(item.index === newOne.index){
+          error += 1
+        }
+      })
+      showList.push(newOne)
+      this.setState({
+        showList,
+        error
+      })
+    }, this.state.speed);
+  }
+  // 删除第一个
+  delFirst = ()=> {
+    this.delFirstTimer = setInterval(()=> {
+      let showList = this.state.showList
+      let error = this.state.error
+      showList.shift()
+      this.setState({
+        showList,
+        error: error + 1
+      })
+    }, 3000)
+  }
+  // 停止游戏
   end = ()=> {
-    clearInterval(this.timer)
+    clearInterval(this.startTimer)
     this.setState({
       start: false,
       showList: []
     })
   }
+  // 监听键盘事件
   onKeyDown = (e)=> {
     let index = null
     let showList = this.state.showList
@@ -66,9 +95,9 @@ export default class Game extends React.Component{
     }
   }
   render() {
-    return (<div>
+    return (<div className='game'>
      <Board size={this.state.size} showList={this.state.showList}></Board>
-     <Settings score={this.state.score} begin={this.begin.bind(this)} end={this.end.bind(this)}></Settings>
+     <Settings speed={this.state.speed} size={this.state.size} score={this.state.score} error={this.state.error} begin={this.begin.bind(this)} end={this.end.bind(this)}></Settings>
     </div>)
   }
 }
@@ -80,6 +109,7 @@ class Board extends React.Component{
     this.state={
     }
   }
+  // 渲染棋盘列表
   list = ()=> {
     const x = this.props.size.x;
     const y = this.props.size.y;
@@ -95,11 +125,11 @@ class Board extends React.Component{
         })
         return <Square key={ind} value={location.value}></Square>
       })
-      return(<div className="row" key={index}>{row}</div>)
+      return(<div className='row' key={index}>{row}</div>)
     })
   }
   render() {
-    return (<div className="board">
+    return (<div className='board'>
      {this.list()}
     </div>)
   }
@@ -113,10 +143,11 @@ class Square extends React.Component{
     }
   }
   render() {
-    return (<div className="square">{this.props.value}</div>)
+    return (<div className='square'>{this.props.value}</div>)
   }
 }
 
+// 操作面板
 class Settings extends React.Component{
   constructor(props){
     super(props)
@@ -135,10 +166,19 @@ class Settings extends React.Component{
     this.props.end()
   }
   render() {
-    return (<div>
-      <div>得分：{this.props.score}</div>
-      <button className="btn" onClick={this.start}>{this.state.start ? '暂停' : '开始'}</button>
-      <button className="btn" onClick={this.end}>停止</button>
+    return (<div className='settings'>
+      <div>设置</div>
+      <div>
+        <span>行数：{this.props.size.x}</span>
+        <span>列数：{this.props.size.y}</span>
+      </div>
+      <div>速度：1个/{this.props.speed}ms</div>
+      <div>
+        <span>得分：{this.props.score}</span>
+        <span>错失：{this.props.error}</span>
+      </div>
+      <button className='btn' onClick={this.start}>{this.state.start ? '暂停' : '开始'}</button>
+      <button className='btn' onClick={this.end}>停止</button>
     </div>)
   }
 }
