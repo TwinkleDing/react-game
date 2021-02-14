@@ -27,10 +27,8 @@ export default class Game extends React.Component{
     })
     if(start){
       this.creatNewOne()
-      this.delFirst()
     }else {
       clearInterval(this.startTimer)
-      clearInterval(this.delFirstTimer)
     }
   }
   // 新增一个
@@ -56,18 +54,6 @@ export default class Game extends React.Component{
       })
     }, this.state.speed);
   }
-  // 删除第一个
-  delFirst = ()=> {
-    this.delFirstTimer = setInterval(()=> {
-      let showList = this.state.showList
-      let error = this.state.error
-      showList.shift()
-      this.setState({
-        showList,
-        error: error + 1
-      })
-    }, 3000)
-  }
   // 停止游戏
   end = ()=> {
     clearInterval(this.startTimer)
@@ -87,6 +73,7 @@ export default class Game extends React.Component{
       }
     })
     if(index !== null){
+      if(index)
       showList.splice(index, 1)
       this.setState({
         showList,
