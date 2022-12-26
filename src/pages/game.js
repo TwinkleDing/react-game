@@ -223,6 +223,7 @@ class Settings extends React.Component {
 	};
 	end = () => {
 		this.props.end();
+		this.setState({ start: false });
 	};
 	render() {
 		return (
